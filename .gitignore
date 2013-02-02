@@ -4,3 +4,18 @@
 *.jar
 *.war
 *.ear
+
+# Forge Files #
+mcp
+cpw
+ibxm
+paulscode
+net
+Start.java
+fml_at.cfg
+fml_marker.cfg
+fmlversion.properties
+forge_at.cfg
+forge_logo.png
+mcp.png
+mcpmod.info
