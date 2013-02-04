@@ -2,7 +2,6 @@ package hea3ven.advenchanting.common;
 
 import java.util.Random;
 
-
 import net.minecraft.block.BlockEnchantmentTable;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -58,7 +57,7 @@ public class BlockAdvancedEnchantmentTable extends BlockEnchantmentTable {
 						item.getItemDamage()));
 
 				if (item.hasTagCompound()) {
-					entityItem.func_92014_d().setTagCompound(
+					entityItem.getEntityItem().setTagCompound(
 							(NBTTagCompound) item.getTagCompound().copy());
 				}
 

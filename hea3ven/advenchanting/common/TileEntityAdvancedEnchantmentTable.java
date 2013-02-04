@@ -3,6 +3,7 @@ package hea3ven.advenchanting.common;
 import java.util.List;
 import java.util.Random;
 
+import net.minecraft.block.Block;
 import net.minecraft.enchantment.EnchantmentData;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
@@ -12,21 +13,28 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.liquids.ILiquidTank;
+import net.minecraftforge.liquids.ITankContainer;
+import net.minecraftforge.liquids.LiquidStack;
+import net.minecraftforge.liquids.LiquidTank;
 
 public class TileEntityAdvancedEnchantmentTable extends TileEntity implements
-		IInventory {
+		IInventory, ITankContainer {
 
 	private ItemStack[] inv;
 	private Random rand = new Random();
 	private int progress;
 	private int enchantmentLevel;
 	private int experience;
+	private LiquidTank experienceTank;
 
 	public TileEntityAdvancedEnchantmentTable() {
 		inv = new ItemStack[2];
 		progress = 0;
 		enchantmentLevel = 1;
 		experience = 0;
+		experienceTank = new LiquidTank(852 * 3);
 	}
 
 	@Override
@@ -113,6 +121,8 @@ public class TileEntityAdvancedEnchantmentTable extends TileEntity implements
 		progress = tagCompound.getShort("Progress");
 		enchantmentLevel = tagCompound.getShort("EnchantmentLevel");
 		experience = tagCompound.getInteger("Experience");
+		experienceTank
+				.fill(new LiquidStack(Block.waterStill, experience), true);
 	}
 
 	@Override
@@ -153,7 +163,7 @@ public class TileEntityAdvancedEnchantmentTable extends TileEntity implements
 
 					if (enchantmentsList != null) {
 						if (isBook)
-							item.itemID = Item.field_92053_bW.itemID;
+							item.itemID = Item.enchantedBook.itemID;
 
 						int bookEnchant = isBook ? this.rand
 								.nextInt(enchantmentsList.size()) : -1;
@@ -162,7 +172,7 @@ public class TileEntityAdvancedEnchantmentTable extends TileEntity implements
 									.get(i);
 
 							if (isBook || i == bookEnchant) {
-								Item.field_92053_bW.func_92060_a(item,
+								Item.enchantedBook.func_92115_a(item,
 										enchantmentData);
 							} else {
 								item.addEnchantment(
@@ -187,7 +197,7 @@ public class TileEntityAdvancedEnchantmentTable extends TileEntity implements
 	public boolean isEnchanting() {
 		return progress != 0;
 	}
-	
+
 	public boolean canEnchant() {
 		return experience > enchantmentLevel;
 	}
@@ -222,11 +232,59 @@ public class TileEntityAdvancedEnchantmentTable extends TileEntity implements
 	}
 
 	public int getExperience() {
-		return experience;
+		LiquidStack liquid = experienceTank.getLiquid();
+		if (liquid != null)
+			return liquid.amount;
+		else
+			return 0;
 	}
 
 	public void setExperience(int experience) {
 		this.experience = experience;
+		LiquidStack liquid = this.experienceTank.getLiquid();
+		if (liquid != null) {
+			if (liquid.amount > this.experience)
+				this.experienceTank.drain(liquid.amount - experience, true);
+			else
+				this.experienceTank.fill(new LiquidStack(Block.waterStill,
+						experience - liquid.amount), true);
+		} else {
+			this.experienceTank.fill(new LiquidStack(Block.waterStill,
+					experience), true);
+		}
+	}
+
+	@Override
+	public int fill(ForgeDirection from, LiquidStack resource, boolean doFill) {
+		experience = getExperience();
+		return experienceTank.fill(resource, doFill);
+	}
+
+	@Override
+	public int fill(int tankIndex, LiquidStack resource, boolean doFill) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public LiquidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
+		return experienceTank.drain(maxDrain, doDrain);
+	}
+
+	@Override
+	public LiquidStack drain(int tankIndex, int maxDrain, boolean doDrain) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ILiquidTank[] getTanks(ForgeDirection direction) {
+		return new ILiquidTank[] { experienceTank };
+	}
+
+	@Override
+	public ILiquidTank getTank(ForgeDirection direction, LiquidStack type) {
+		return experienceTank;
 	}
 
 }
