@@ -27,8 +27,8 @@ public class ContainerAdvancedEnchantmentTable extends Container {
 		// the Slot constructor takes the IInventory and the slot number in that
 		// it binds to
 		// and the x-y coordinates it resides on-screen
-		addSlotToContainer(new Slot(tileEntity, 0, 56, 20));
-		addSlotToContainer(new Slot(tileEntity, 1, 116, 20));
+		addSlotToContainer(new Slot(tileEntity, 0, 32, 23));
+		addSlotToContainer(new Slot(tileEntity, 1, 92, 23));
 
 		// commonly used vanilla code that adds the player's inventory
 		bindPlayerInventory(inventoryPlayer);
@@ -43,12 +43,12 @@ public class ContainerAdvancedEnchantmentTable extends Container {
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 9; j++) {
 				addSlotToContainer(new Slot(inventoryPlayer, j + i * 9 + 9,
-						8 + j * 18, 84 + i * 18));
+						20 + j * 18, 95 + i * 18));
 			}
 		}
 
 		for (int i = 0; i < 9; i++) {
-			addSlotToContainer(new Slot(inventoryPlayer, i, 8 + i * 18, 142));
+			addSlotToContainer(new Slot(inventoryPlayer, i, 20 + i * 18, 153));
 		}
 	}
 

@@ -3,6 +3,7 @@ package hea3ven.advenchanting.common;
 import hea3ven.advenchanting.client.GuiHandler;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import cpw.mods.fml.common.Mod;
@@ -30,6 +31,8 @@ public class AdvancedEnchantingMod {
 
 	public final static BlockAdvancedEnchantmentTable advancedEnchantmentTableBlock = new BlockAdvancedEnchantmentTable(
 			2000);
+	public final static BlockExperienceLiquidStill experienceLiquidStill = new BlockExperienceLiquidStill(2001, Material.water);
+	public final static BlockExperienceLiquidFlowing experienceLiquidFlowing = new BlockExperienceLiquidFlowing(2002, Material.water);
 
 	@PreInit
 	public void preInit(FMLPreInitializationEvent event) {
@@ -49,6 +52,10 @@ public class AdvancedEnchantingMod {
 		GameRegistry.registerTileEntity(
 				TileEntityAdvancedEnchantmentTable.class,
 				"containerAdvancedEnchantmentTable");
+		
+		GameRegistry.registerBlock(experienceLiquidStill, "experienceLiquidStill");
+		GameRegistry.registerBlock(experienceLiquidFlowing, "experienceLiquidMoving");
+		
 		NetworkRegistry.instance().registerGuiHandler(this, new GuiHandler());
 		GameRegistry.addRecipe(advancedEnchantmentTableStack, "xxx", "xyx",
 				"zrz", 'x', new ItemStack(Item.book, 1), 'y', new ItemStack(

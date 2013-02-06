@@ -14,7 +14,18 @@ import net.minecraft.world.World;
 public class BlockAdvancedEnchantmentTable extends BlockEnchantmentTable {
 	public BlockAdvancedEnchantmentTable(int id) {
 		super(id);
+		this.blockIndexInTexture = 0;
 		setBlockName("Advanced Enchantment Table");
+	}
+	
+	@Override
+	public String getTextureFile() {
+		return CommonProxy.BLOCK_PNG;
+	}
+	
+	@Override
+	public int getBlockTextureFromSide(int side) {
+        return side == 0 ? this.blockIndexInTexture + 17 : (side == 1 ? this.blockIndexInTexture : this.blockIndexInTexture + 16);
 	}
 
 	@Override

@@ -26,14 +26,12 @@ public class TileEntityAdvancedEnchantmentTable extends TileEntity implements
 	private Random rand = new Random();
 	private int progress;
 	private int enchantmentLevel;
-	private int experience;
 	private LiquidTank experienceTank;
 
 	public TileEntityAdvancedEnchantmentTable() {
 		inv = new ItemStack[2];
 		progress = 0;
 		enchantmentLevel = 1;
-		experience = 0;
 		experienceTank = new LiquidTank(852 * 3);
 	}
 
@@ -118,11 +116,11 @@ public class TileEntityAdvancedEnchantmentTable extends TileEntity implements
 				inv[slot] = ItemStack.loadItemStackFromNBT(tag);
 			}
 		}
-		progress = tagCompound.getShort("Progress");
-		enchantmentLevel = tagCompound.getShort("EnchantmentLevel");
-		experience = tagCompound.getInteger("Experience");
-		experienceTank
-				.fill(new LiquidStack(Block.waterStill, experience), true);
+		progress = tagCompound.getShort("progress");
+		enchantmentLevel = tagCompound.getShort("enchantmentLevel");
+		if (tagCompound.hasKey("experienceTank")) {
+			experienceTank.setLiquid(LiquidStack.loadLiquidStackFromNBT(tagCompound.getCompoundTag("experienceTank")));
+		}
 	}
 
 	@Override
@@ -140,9 +138,11 @@ public class TileEntityAdvancedEnchantmentTable extends TileEntity implements
 			}
 		}
 		tagCompound.setTag("Inventory", itemList);
-		tagCompound.setShort("Progress", (short) progress);
-		tagCompound.setShort("EnchantmentLevel", (short) enchantmentLevel);
-		tagCompound.setInteger("Experience", experience);
+		tagCompound.setShort("progress", (short) progress);
+		tagCompound.setShort("enchantmentLevel", (short) enchantmentLevel);
+		if (experienceTank.getLiquid() != null) {
+			tagCompound.setTag("experienceTank", experienceTank.getLiquid().writeToNBT(new NBTTagCompound()));
+		}
 	}
 
 	@Override
@@ -153,7 +153,7 @@ public class TileEntityAdvancedEnchantmentTable extends TileEntity implements
 				if (progress >= 100) {
 					progress = 0;
 
-					experience -= enchantmentLevel;
+					setExperience(getExperience() - enchantmentLevel);
 
 					ItemStack item = inv[0];
 					List enchantmentsList = EnchantmentHelper
@@ -199,7 +199,8 @@ public class TileEntityAdvancedEnchantmentTable extends TileEntity implements
 	}
 
 	public boolean canEnchant() {
-		return experience > enchantmentLevel;
+		LiquidStack liquid = experienceTank.getLiquid();
+		return liquid != null && liquid.amount > enchantmentLevel;
 	}
 
 	public int getProgressScaled(int i) {
@@ -227,10 +228,6 @@ public class TileEntityAdvancedEnchantmentTable extends TileEntity implements
 			this.enchantmentLevel = enchantmentLevel;
 	}
 
-	public void addExperience(int experience) {
-		this.experience += experience;
-	}
-
 	public int getExperience() {
 		LiquidStack liquid = experienceTank.getLiquid();
 		if (liquid != null)
@@ -240,23 +237,19 @@ public class TileEntityAdvancedEnchantmentTable extends TileEntity implements
 	}
 
 	public void setExperience(int experience) {
-		this.experience = experience;
 		LiquidStack liquid = this.experienceTank.getLiquid();
 		if (liquid != null) {
-			if (liquid.amount > this.experience)
-				this.experienceTank.drain(liquid.amount - experience, true);
-			else
-				this.experienceTank.fill(new LiquidStack(Block.waterStill,
-						experience - liquid.amount), true);
+			liquid.amount = experience;
 		} else {
-			this.experienceTank.fill(new LiquidStack(Block.waterStill,
-					experience), true);
+			this.experienceTank.setLiquid(new LiquidStack(AdvancedEnchantingMod.experienceLiquidStill.blockID,
+					experience));
 		}
 	}
 
 	@Override
 	public int fill(ForgeDirection from, LiquidStack resource, boolean doFill) {
-		experience = getExperience();
+		if(resource.itemID  != AdvancedEnchantingMod.experienceLiquidStill.blockID)
+			return 0;
 		return experienceTank.fill(resource, doFill);
 	}
 

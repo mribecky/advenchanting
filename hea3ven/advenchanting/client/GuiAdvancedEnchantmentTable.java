@@ -27,15 +27,17 @@ public class GuiAdvancedEnchantmentTable extends GuiContainer {
 				new ContainerAdvancedEnchantmentTable(inventoryPlayer,
 						tileEntity));
 		tileEntityAdvEnchTable = tileEntity;
+		xSize = 200;
+		ySize = 177;
 	}
 
 	@Override
 	public void initGui() {
 		super.initGui();
-		addLevelButton = new GuiButton(1, guiLeft + 30, guiTop + 50, 20, 20,
+		addLevelButton = new GuiButton(1, guiLeft + 30, guiTop + 60, 20, 20,
 				"-");
 		controlList.add(addLevelButton);
-		substractLevelButton = new GuiButton(2, guiLeft + 80, guiTop + 50, 20,
+		substractLevelButton = new GuiButton(2, guiLeft + 80, guiTop + 60, 20,
 				20, "+");
 		controlList.add(substractLevelButton);
 		addExperienceButton = new GuiButton(3, guiLeft + 114, guiTop + 60, 50,
@@ -48,11 +50,11 @@ public class GuiAdvancedEnchantmentTable extends GuiContainer {
 		// draw text and stuff here
 		// the parameters for drawString are: string, x, y, color
 		fontRenderer.drawString("Adv. Enchantment Table", 8, 6, 4210752);
-		fontRenderer.drawString("Enchantment Level:", 8, 40, 4210752);
-		if(tileEntityAdvEnchTable.getEnchantmentLevel() >= 10)
-			fontRenderer.drawString(Integer.toString(tileEntityAdvEnchTable.getEnchantmentLevel()), 60, 55, 4210752);
-		else
-			fontRenderer.drawString(Integer.toString(tileEntityAdvEnchTable.getEnchantmentLevel()), 64, 55, 4210752);
+		fontRenderer.drawString("Enchantment Level:", 8, 50, 4210752);
+		int pad = 0;
+		if(tileEntityAdvEnchTable.getEnchantmentLevel() < 10)
+			pad = 4;
+		fontRenderer.drawString(Integer.toString(tileEntityAdvEnchTable.getEnchantmentLevel()), 60 + pad, 65, 4210752);
 		fontRenderer.drawString(Integer.toString(tileEntityAdvEnchTable.getExperience()), 130, 50, 4210752);
 		// draws "Inventory" or your regional equivalent
 		fontRenderer.drawString(
