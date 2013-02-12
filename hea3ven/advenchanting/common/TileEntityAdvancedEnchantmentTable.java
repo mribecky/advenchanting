@@ -228,6 +228,10 @@ public class TileEntityAdvancedEnchantmentTable extends TileEntity implements
 			this.enchantmentLevel = enchantmentLevel;
 	}
 
+	public int getExperienceScaled(int i) {
+		return getExperience() * i / experienceTank.getCapacity();
+	}
+
 	public int getExperience() {
 		LiquidStack liquid = experienceTank.getLiquid();
 		if (liquid != null)

@@ -1,14 +1,20 @@
 package hea3ven.advenchanting.client;
 
+import hea3ven.advenchanting.common.AdvancedEnchantingMod;
 import hea3ven.advenchanting.common.ContainerAdvancedEnchantmentTable;
 import hea3ven.advenchanting.common.PacketHandler;
 import hea3ven.advenchanting.common.TileEntityAdvancedEnchantmentTable;
+import net.minecraft.block.Block;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.util.StatCollector;
+import net.minecraftforge.client.ForgeHooksClient;
 
 import org.lwjgl.opengl.GL11;
+
+import buildcraft.core.DefaultProps;
 
 import cpw.mods.fml.common.network.PacketDispatcher;
 
@@ -21,8 +27,6 @@ public class GuiAdvancedEnchantmentTable extends GuiContainer {
 
 	public GuiAdvancedEnchantmentTable(InventoryPlayer inventoryPlayer,
 			TileEntityAdvancedEnchantmentTable tileEntity) {
-		// the container is instanciated and passed to the superclass for
-		// handling
 		super(
 				new ContainerAdvancedEnchantmentTable(inventoryPlayer,
 						tileEntity));
@@ -47,16 +51,14 @@ public class GuiAdvancedEnchantmentTable extends GuiContainer {
 
 	@Override
 	protected void drawGuiContainerForegroundLayer(int param1, int param2) {
-		// draw text and stuff here
-		// the parameters for drawString are: string, x, y, color
 		fontRenderer.drawString("Adv. Enchantment Table", 8, 6, 4210752);
 		fontRenderer.drawString("Enchantment Level:", 8, 50, 4210752);
 		int pad = 0;
-		if(tileEntityAdvEnchTable.getEnchantmentLevel() < 10)
+		if (tileEntityAdvEnchTable.getEnchantmentLevel() < 10)
 			pad = 4;
-		fontRenderer.drawString(Integer.toString(tileEntityAdvEnchTable.getEnchantmentLevel()), 60 + pad, 65, 4210752);
-		fontRenderer.drawString(Integer.toString(tileEntityAdvEnchTable.getExperience()), 130, 50, 4210752);
-		// draws "Inventory" or your regional equivalent
+		fontRenderer.drawString(
+				Integer.toString(tileEntityAdvEnchTable.getEnchantmentLevel()),
+				60 + pad, 65, 4210752);
 		fontRenderer.drawString(
 				StatCollector.translateToLocal("container.inventory"), 8,
 				ySize - 96 + 2, 4210752);
@@ -66,7 +68,6 @@ public class GuiAdvancedEnchantmentTable extends GuiContainer {
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float par1, int par2,
 			int par3) {
-	// draw your Gui here, only thing you need to change is the path
 		int texture = mc.renderEngine
 				.getTexture("/hea3ven/advenchanting/advenchant.png");
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
@@ -78,6 +79,10 @@ public class GuiAdvancedEnchantmentTable extends GuiContainer {
 		int progress = tileEntityAdvEnchTable.getProgressScaled(23);
 		// progress = 10;
 		this.drawTexturedModalRect(x + 79, y + 22, 176, 14, progress, 16);
+
+		displayGauge(x, y, 19, 167,
+				tileEntityAdvEnchTable.getExperienceScaled(58),
+				AdvancedEnchantingMod.experienceLiquidStill.blockID, 0);
 	}
 
 	@Override
@@ -85,15 +90,68 @@ public class GuiAdvancedEnchantmentTable extends GuiContainer {
 		super.actionPerformed(par1GuiButton);
 		switch (par1GuiButton.id) {
 		case 1:
-			PacketHandler.sendUpdateEnchantmentLevel(tileEntityAdvEnchTable, tileEntityAdvEnchTable.getEnchantmentLevel() - 1);
+			PacketHandler.sendUpdateEnchantmentLevel(tileEntityAdvEnchTable,
+					tileEntityAdvEnchTable.getEnchantmentLevel() - 1);
 			break;
 		case 2:
-			PacketHandler.sendUpdateEnchantmentLevel(tileEntityAdvEnchTable, tileEntityAdvEnchTable.getEnchantmentLevel() + 1);
+			PacketHandler.sendUpdateEnchantmentLevel(tileEntityAdvEnchTable,
+					tileEntityAdvEnchTable.getEnchantmentLevel() + 1);
 			break;
 		case 3:
 			PacketHandler.sendAddExperience(tileEntityAdvEnchTable);
 			break;
 		}
-		
+
+	}
+
+	private void displayGauge(int j, int k, int line, int col, int squaled,
+			int liquidId, int liquidMeta) {
+		int liquidImgIndex = 0;
+
+		if (liquidId <= 0)
+			return;
+		if (liquidId < Block.blocksList.length
+				&& Block.blocksList[liquidId] != null) {
+			ForgeHooksClient.bindTexture(
+					Block.blocksList[liquidId].getTextureFile(), 0);
+			liquidImgIndex = Block.blocksList[liquidId].blockIndexInTexture;
+		} else if (Item.itemsList[liquidId] != null) {
+			ForgeHooksClient.bindTexture(
+					Item.itemsList[liquidId].getTextureFile(), 0);
+			liquidImgIndex = Item.itemsList[liquidId]
+					.getIconFromDamage(liquidMeta);
+		} else
+			return;
+
+		int imgLine = liquidImgIndex / 16;
+		int imgColumn = liquidImgIndex - imgLine * 16;
+
+		int start = 0;
+
+		while (true) {
+			int x = 0;
+
+			if (squaled > 16) {
+				x = 16;
+				squaled -= 16;
+			} else {
+				x = squaled;
+				squaled = 0;
+			}
+
+			drawTexturedModalRect(j + col, k + line + 58 - x - start,
+					imgColumn * 16, imgLine * 16 + (16 - x), 16, 16 - (16 - x));
+			start = start + 16;
+
+			if (x == 0 || squaled == 0) {
+				break;
+			}
+		}
+
+		int i = mc.renderEngine
+				.getTexture("/hea3ven/advenchanting/advenchant.png");
+
+		mc.renderEngine.bindTexture(i);
+		drawTexturedModalRect(j + col, k + line, 200, 34, 16, 60);
 	}
 }
