@@ -14,10 +14,6 @@ import net.minecraftforge.client.ForgeHooksClient;
 
 import org.lwjgl.opengl.GL11;
 
-import buildcraft.core.DefaultProps;
-
-import cpw.mods.fml.common.network.PacketDispatcher;
-
 public class GuiAdvancedEnchantmentTable extends GuiContainer {
 
 	private GuiButton addLevelButton;
@@ -78,7 +74,7 @@ public class GuiAdvancedEnchantmentTable extends GuiContainer {
 
 		int progress = tileEntityAdvEnchTable.getProgressScaled(23);
 		// progress = 10;
-		this.drawTexturedModalRect(x + 79, y + 22, 176, 14, progress, 16);
+		this.drawTexturedModalRect(x + 55, y + 25, 200, 14, progress, 16);
 
 		displayGauge(x, y, 19, 167,
 				tileEntityAdvEnchTable.getExperienceScaled(58),
