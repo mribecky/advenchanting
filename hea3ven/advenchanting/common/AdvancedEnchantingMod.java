@@ -1,11 +1,18 @@
 package hea3ven.advenchanting.common;
 
 import hea3ven.advenchanting.client.GuiHandler;
-
+import hea3ven.advenchanting.client.RenderingExperienceLiquid;
+import hea3ven.advenchanting.client.TextureExperienceLiquidFX;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.liquids.LiquidContainerData;
+import net.minecraftforge.liquids.LiquidContainerRegistry;
+import net.minecraftforge.liquids.LiquidDictionary;
+import net.minecraftforge.liquids.LiquidStack;
+import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.Init;
 import cpw.mods.fml.common.Mod.Instance;
@@ -29,10 +36,21 @@ public class AdvancedEnchantingMod {
 	@SidedProxy(clientSide = "hea3ven.advenchanting.client.ClientProxy", serverSide = "hea3ven.advenchanting.CommonProxy")
 	public static CommonProxy proxy;
 
+	public static int expLiquidModel;
+
 	public final static BlockAdvancedEnchantmentTable advancedEnchantmentTableBlock = new BlockAdvancedEnchantmentTable(
 			2000);
-	public final static BlockExperienceLiquidStill experienceLiquidStill = new BlockExperienceLiquidStill(2001, Material.water);
-	public final static BlockExperienceLiquidFlowing experienceLiquidFlowing = new BlockExperienceLiquidFlowing(2002, Material.water);
+	public final static BlockExperienceLiquidStill experienceLiquidStill = new BlockExperienceLiquidStill(
+			2002, Material.water);
+	public final static BlockExperienceLiquidFlowing experienceLiquidFlowing = new BlockExperienceLiquidFlowing(
+			2001, Material.water);
+
+	public static LiquidStack experienceLiquid;
+
+	private Item bucketExperienceLiquid;
+
+	// public final static ItemExpLiquidBucket expLiquidBucket = new
+	// ItemExpLiquidBucket(2003);
 
 	@PreInit
 	public void preInit(FMLPreInitializationEvent event) {
@@ -48,14 +66,35 @@ public class AdvancedEnchantingMod {
 
 		GameRegistry.registerBlock(advancedEnchantmentTableBlock,
 				"advEnchantmentTable");
-		LanguageRegistry.addName(advancedEnchantmentTableBlock, "Adv. Enchantment Table");
+		LanguageRegistry.addName(advancedEnchantmentTableBlock,
+				"Adv. Enchantment Table");
 		GameRegistry.registerTileEntity(
 				TileEntityAdvancedEnchantmentTable.class,
 				"containerAdvancedEnchantmentTable");
-		
-		GameRegistry.registerBlock(experienceLiquidStill, "experienceLiquidStill");
-		GameRegistry.registerBlock(experienceLiquidFlowing, "experienceLiquidMoving");
-		
+
+		bucketExperienceLiquid = (new ItemExpLiquidBucket(500)).setItemName(
+				"bucketExperienceLiquid").setContainerItem(Item.bucketEmpty);
+		LanguageRegistry.addName(bucketExperienceLiquid, "Experience Bucket");
+
+		experienceLiquidStill.setBlockName("expLiquidStill");
+		experienceLiquidFlowing.setBlockName("expLiquidFlowing");
+		GameRegistry.registerBlock(experienceLiquidStill,
+				"experienceLiquidStill");
+		LanguageRegistry.addName(experienceLiquidStill,
+				"Experience Liquid Still");
+		GameRegistry.registerBlock(experienceLiquidFlowing,
+				"experienceLiquidMoving");
+		LanguageRegistry.addName(experienceLiquidFlowing,
+				"Experience Liquid Flowing");
+		experienceLiquid = LiquidDictionary.getOrCreateLiquid(
+				"ExperienceLiquid", new LiquidStack(experienceLiquidStill, 1));
+		LiquidContainerRegistry.registerLiquid(new LiquidContainerData(
+				LiquidDictionary.getLiquid("ExperienceLiquid",
+						LiquidContainerRegistry.BUCKET_VOLUME), new ItemStack(
+						bucketExperienceLiquid),
+				new ItemStack(Item.bucketEmpty)));
+		// GameRegistry.registerItem(expLiquidBucket, "experienceLiquidBucket");
+
 		NetworkRegistry.instance().registerGuiHandler(this, new GuiHandler());
 		GameRegistry.addRecipe(advancedEnchantmentTableStack, "xxx", "xyx",
 				"zrz", 'x', new ItemStack(Item.book, 1), 'y', new ItemStack(
@@ -67,6 +106,15 @@ public class AdvancedEnchantingMod {
 		// TickRegistry.registerTickHandler(new TimeControlTickHandler(),
 		// Side.SERVER);
 		// FMLCommonHandler.instance().getMinecraftServerInstance().get
+
+		net.minecraft.client.renderer.RenderEngine renderEngine = FMLClientHandler
+				.instance().getClient().renderEngine;
+
+		renderEngine.registerTextureFX(new TextureExperienceLiquidFX());
+		AdvancedEnchantingMod.expLiquidModel = RenderingRegistry
+				.getNextAvailableRenderId();
+		RenderingRegistry.registerBlockHandler(new RenderingExperienceLiquid());
+
 	}
 
 	@PostInit
