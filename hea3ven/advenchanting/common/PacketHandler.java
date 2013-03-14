@@ -51,7 +51,7 @@ public class PacketHandler implements IPacketHandler {
 					int initialExperience = entityPlayer.experienceTotal;
 					entityPlayer.addExperienceLevel(-entityPlayer.experienceLevel - 1); // This resets the levels to 0
 					TileEntityAdvancedEnchantmentTable te = ((TileEntityAdvancedEnchantmentTable) tileEntity);
-					te.setExperience(te.getExperience() + initialExperience - entityPlayer.experienceTotal);
+					te.setExperience(te.getExperience() + (initialExperience - entityPlayer.experienceTotal) * BlockExperienceLiquidStill.getExperienceMultiplier());
 				}
 			}
 		}

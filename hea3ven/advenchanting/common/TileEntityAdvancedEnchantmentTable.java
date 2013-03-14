@@ -32,7 +32,7 @@ public class TileEntityAdvancedEnchantmentTable extends TileEntity implements
 		inv = new ItemStack[2];
 		progress = 0;
 		enchantmentLevel = 1;
-		experienceTank = new LiquidTank(852 * 3);
+		experienceTank = new LiquidTank(770 * 3 * BlockExperienceLiquidStill.getExperienceMultiplier()); // 3 times level 30
 	}
 
 	@Override
@@ -141,6 +141,8 @@ public class TileEntityAdvancedEnchantmentTable extends TileEntity implements
 		tagCompound.setShort("progress", (short) progress);
 		tagCompound.setShort("enchantmentLevel", (short) enchantmentLevel);
 		if (experienceTank.getLiquid() != null) {
+			if(experienceTank.getLiquid().amount > experienceTank.getCapacity())
+				setExperience(experienceTank.getCapacity());
 			tagCompound.setTag("experienceTank", experienceTank.getLiquid().writeToNBT(new NBTTagCompound()));
 		}
 	}
@@ -153,7 +155,7 @@ public class TileEntityAdvancedEnchantmentTable extends TileEntity implements
 				if (progress >= 100) {
 					progress = 0;
 
-					setExperience(getExperience() - enchantmentLevel);
+					decreaseExperienceByLevel(enchantmentLevel);
 
 					ItemStack item = inv[0];
 					List enchantmentsList = EnchantmentHelper
@@ -192,6 +194,10 @@ public class TileEntityAdvancedEnchantmentTable extends TileEntity implements
 				progress = 0;
 			}
 		}
+	}
+
+	private void decreaseExperienceByLevel(int enchantmentLevel) {
+		setExperience(getExperience() - BlockExperienceLiquidStill.getAmountFromLevels(enchantmentLevel));
 	}
 
 	public boolean isEnchanting() {
