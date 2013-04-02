@@ -2,31 +2,41 @@ package hea3ven.advenchanting.common;
 
 import java.util.Random;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 import net.minecraft.block.BlockEnchantmentTable;
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.Icon;
 import net.minecraft.world.World;
 
 public class BlockAdvancedEnchantmentTable extends BlockEnchantmentTable {
+	private Icon iconTop;
+	private Icon iconBottom;
+
 	public BlockAdvancedEnchantmentTable(int id) {
 		super(id);
-		this.blockIndexInTexture = 0;
-		setBlockName("Advanced Enchantment Table");
+		setUnlocalizedName("Advanced Enchantment Table");
 	}
 	
-	@Override
-	public String getTextureFile() {
-		return CommonProxy.BLOCK_PNG;
-	}
+    @SideOnly(Side.CLIENT)
+    public void func_94332_a(IconRegister par1IconRegister)
+    {
+        this.field_94336_cN = par1IconRegister.func_94245_a("AdvEnchanting:advenchantment_side");
+        this.iconTop = par1IconRegister.func_94245_a("AdvEnchanting:advenchantment_top");
+        this.iconBottom = par1IconRegister.func_94245_a("AdvEnchanting:advenchantment_bottom");
+    }
 	
-	@Override
-	public int getBlockTextureFromSide(int side) {
-        return side == 0 ? this.blockIndexInTexture + 17 : (side == 1 ? this.blockIndexInTexture : this.blockIndexInTexture + 16);
-	}
+    public Icon getBlockTextureFromSideAndMetadata(int par1, int par2)
+    {
+        return par1 == 0 ? this.iconBottom : (par1 == 1 ? this.iconTop : this.field_94336_cN);
+    }
 
 	@Override
 	public boolean onBlockActivated(World world, int x, int y, int z,

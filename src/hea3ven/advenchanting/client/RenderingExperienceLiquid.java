@@ -1,7 +1,6 @@
 package hea3ven.advenchanting.client;
 
 import hea3ven.advenchanting.common.AdvancedEnchantingMod;
-import buildcraft.BuildCraftCore;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.world.IBlockAccess;

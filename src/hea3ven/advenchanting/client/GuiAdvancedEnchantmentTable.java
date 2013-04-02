@@ -36,13 +36,13 @@ public class GuiAdvancedEnchantmentTable extends GuiContainer {
 		super.initGui();
 		addLevelButton = new GuiButton(1, guiLeft + 30, guiTop + 60, 20, 20,
 				"-");
-		controlList.add(addLevelButton);
+		buttonList.add(addLevelButton);
 		substractLevelButton = new GuiButton(2, guiLeft + 80, guiTop + 60, 20,
 				20, "+");
-		controlList.add(substractLevelButton);
+		buttonList.add(substractLevelButton);
 		addExperienceButton = new GuiButton(3, guiLeft + 114, guiTop + 60, 50,
 				20, "Add Exp.");
-		controlList.add(addExperienceButton);
+		buttonList.add(addExperienceButton);
 	};
 
 	@Override
@@ -64,10 +64,8 @@ public class GuiAdvancedEnchantmentTable extends GuiContainer {
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float par1, int par2,
 			int par3) {
-		int texture = mc.renderEngine
-				.getTexture("/hea3ven/advenchanting/advenchant.png");
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		this.mc.renderEngine.bindTexture(texture);
+		this.mc.renderEngine.func_98187_b("/hea3ven/advenchanting/advenchant.png");
 		int x = (width - xSize) / 2;
 		int y = (height - ySize) / 2;
 		this.drawTexturedModalRect(x, y, 0, 0, xSize, ySize);
@@ -76,9 +74,9 @@ public class GuiAdvancedEnchantmentTable extends GuiContainer {
 		// progress = 10;
 		this.drawTexturedModalRect(x + 55, y + 25, 200, 14, progress, 16);
 
-		displayGauge(x, y, 19, 167,
-				tileEntityAdvEnchTable.getExperienceScaled(58),
-				AdvancedEnchantingMod.experienceLiquidStill.blockID, 0);
+//		displayGauge(x, y, 19, 167,
+//				tileEntityAdvEnchTable.getExperienceScaled(58),
+//				AdvancedEnchantingMod.experienceLiquidStill.blockID, 0);
 	}
 
 	@Override
@@ -100,54 +98,51 @@ public class GuiAdvancedEnchantmentTable extends GuiContainer {
 
 	}
 
-	private void displayGauge(int j, int k, int line, int col, int squaled,
-			int liquidId, int liquidMeta) {
-		int liquidImgIndex = 0;
-
-		if (liquidId <= 0)
-			return;
-		if (liquidId < Block.blocksList.length
-				&& Block.blocksList[liquidId] != null) {
-			ForgeHooksClient.bindTexture(
-					Block.blocksList[liquidId].getTextureFile(), 0);
-			liquidImgIndex = Block.blocksList[liquidId].blockIndexInTexture;
-		} else if (Item.itemsList[liquidId] != null) {
-			ForgeHooksClient.bindTexture(
-					Item.itemsList[liquidId].getTextureFile(), 0);
-			liquidImgIndex = Item.itemsList[liquidId]
-					.getIconFromDamage(liquidMeta);
-		} else
-			return;
-
-		int imgLine = liquidImgIndex / 16;
-		int imgColumn = liquidImgIndex - imgLine * 16;
-
-		int start = 0;
-
-		while (true) {
-			int x = 0;
-
-			if (squaled > 16) {
-				x = 16;
-				squaled -= 16;
-			} else {
-				x = squaled;
-				squaled = 0;
-			}
-
-			drawTexturedModalRect(j + col, k + line + 58 - x - start,
-					imgColumn * 16, imgLine * 16 + (16 - x), 16, 16 - (16 - x));
-			start = start + 16;
-
-			if (x == 0 || squaled == 0) {
-				break;
-			}
-		}
-
-		int i = mc.renderEngine
-				.getTexture("/hea3ven/advenchanting/advenchant.png");
-
-		mc.renderEngine.bindTexture(i);
-		drawTexturedModalRect(j + col, k + line, 200, 34, 16, 60);
-	}
+//	private void displayGauge(int j, int k, int line, int col, int squaled,
+//			int liquidId, int liquidMeta) {
+//		int liquidImgIndex = 0;
+//
+//		if (liquidId <= 0)
+//			return;
+//		if (liquidId < Block.blocksList.length
+//				&& Block.blocksList[liquidId] != null) {
+//			ForgeHooksClient.bindTexture(
+//					Block.blocksList[liquidId].getTextureFile(), 0);
+//			liquidImgIndex = Block.blocksList[liquidId].blockIndexInTexture;
+//		} else if (Item.itemsList[liquidId] != null) {
+//			ForgeHooksClient.bindTexture(
+//					Item.itemsList[liquidId].getTextureFile(), 0);
+//			liquidImgIndex = Item.itemsList[liquidId]
+//					.getIconFromDamage(liquidMeta);
+//		} else
+//			return;
+//
+//		int imgLine = liquidImgIndex / 16;
+//		int imgColumn = liquidImgIndex - imgLine * 16;
+//
+//		int start = 0;
+//
+//		while (true) {
+//			int x = 0;
+//
+//			if (squaled > 16) {
+//				x = 16;
+//				squaled -= 16;
+//			} else {
+//				x = squaled;
+//				squaled = 0;
+//			}
+//
+//			drawTexturedModalRect(j + col, k + line + 58 - x - start,
+//					imgColumn * 16, imgLine * 16 + (16 - x), 16, 16 - (16 - x));
+//			start = start + 16;
+//
+//			if (x == 0 || squaled == 0) {
+//				break;
+//			}
+//		}
+//
+//		this.mc.renderEngine.func_98187_b("/hea3ven/advenchanting/advenchant.png");
+//		drawTexturedModalRect(j + col, k + line, 200, 34, 16, 60);
+//	}
 }

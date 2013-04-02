@@ -290,4 +290,15 @@ public class TileEntityAdvancedEnchantmentTable extends TileEntity implements
 		return experienceTank;
 	}
 
+	@Override
+	public boolean func_94042_c() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean func_94041_b(int i, ItemStack itemstack) {
+		return true;
+	}
+
 }
