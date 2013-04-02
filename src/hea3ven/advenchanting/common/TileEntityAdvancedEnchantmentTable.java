@@ -3,7 +3,6 @@ package hea3ven.advenchanting.common;
 import java.util.List;
 import java.util.Random;
 
-import net.minecraft.block.Block;
 import net.minecraft.enchantment.EnchantmentData;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
@@ -32,7 +31,11 @@ public class TileEntityAdvancedEnchantmentTable extends TileEntity implements
 		inv = new ItemStack[2];
 		progress = 0;
 		enchantmentLevel = 1;
-		experienceTank = new LiquidTank(770 * 3 * BlockExperienceLiquidStill.getExperienceMultiplier()); // 3 times level 30
+		experienceTank = new LiquidTank(
+				770 * 3 * BlockExperienceLiquidStill.getExperienceMultiplier()); // 3
+																					// times
+																					// level
+																					// 30
 	}
 
 	@Override
@@ -119,7 +122,9 @@ public class TileEntityAdvancedEnchantmentTable extends TileEntity implements
 		progress = tagCompound.getShort("progress");
 		enchantmentLevel = tagCompound.getShort("enchantmentLevel");
 		if (tagCompound.hasKey("experienceTank")) {
-			experienceTank.setLiquid(LiquidStack.loadLiquidStackFromNBT(tagCompound.getCompoundTag("experienceTank")));
+			experienceTank.setLiquid(LiquidStack
+					.loadLiquidStackFromNBT(tagCompound
+							.getCompoundTag("experienceTank")));
 		}
 	}
 
@@ -141,9 +146,11 @@ public class TileEntityAdvancedEnchantmentTable extends TileEntity implements
 		tagCompound.setShort("progress", (short) progress);
 		tagCompound.setShort("enchantmentLevel", (short) enchantmentLevel);
 		if (experienceTank.getLiquid() != null) {
-			if(experienceTank.getLiquid().amount > experienceTank.getCapacity())
+			if (experienceTank.getLiquid().amount > experienceTank
+					.getCapacity())
 				setExperience(experienceTank.getCapacity());
-			tagCompound.setTag("experienceTank", experienceTank.getLiquid().writeToNBT(new NBTTagCompound()));
+			tagCompound.setTag("experienceTank", experienceTank.getLiquid()
+					.writeToNBT(new NBTTagCompound()));
 		}
 	}
 
@@ -158,7 +165,8 @@ public class TileEntityAdvancedEnchantmentTable extends TileEntity implements
 					decreaseExperienceByLevel(enchantmentLevel);
 
 					ItemStack item = inv[0];
-					List enchantmentsList = EnchantmentHelper
+					@SuppressWarnings("unchecked")
+					List<EnchantmentData> enchantmentsList = EnchantmentHelper
 							.buildEnchantmentList(this.rand, item,
 									this.enchantmentLevel);
 					boolean isBook = item.itemID == Item.book.itemID;
@@ -170,7 +178,7 @@ public class TileEntityAdvancedEnchantmentTable extends TileEntity implements
 						int bookEnchant = isBook ? this.rand
 								.nextInt(enchantmentsList.size()) : -1;
 						for (int i = 0; i < enchantmentsList.size(); ++i) {
-							EnchantmentData enchantmentData = (EnchantmentData) enchantmentsList
+							EnchantmentData enchantmentData = enchantmentsList
 									.get(i);
 
 							if (isBook || i == bookEnchant) {
@@ -197,7 +205,9 @@ public class TileEntityAdvancedEnchantmentTable extends TileEntity implements
 	}
 
 	private void decreaseExperienceByLevel(int enchantmentLevel) {
-		setExperience(getExperience() - BlockExperienceLiquidStill.getAmountFromLevels(enchantmentLevel));
+		setExperience(getExperience()
+				- BlockExperienceLiquidStill
+						.getAmountFromLevels(enchantmentLevel));
 	}
 
 	public boolean isEnchanting() {
@@ -251,14 +261,15 @@ public class TileEntityAdvancedEnchantmentTable extends TileEntity implements
 		if (liquid != null) {
 			liquid.amount = experience;
 		} else {
-			this.experienceTank.setLiquid(new LiquidStack(AdvancedEnchantingMod.experienceLiquidStill.blockID,
+			this.experienceTank.setLiquid(new LiquidStack(
+					AdvancedEnchantingMod.experienceLiquidStill.blockID,
 					experience));
 		}
 	}
 
 	@Override
 	public int fill(ForgeDirection from, LiquidStack resource, boolean doFill) {
-		if(resource.itemID  != AdvancedEnchantingMod.experienceLiquidStill.blockID)
+		if (resource.itemID != AdvancedEnchantingMod.experienceLiquidStill.blockID)
 			return 0;
 		return experienceTank.fill(resource, doFill);
 	}
@@ -291,13 +302,14 @@ public class TileEntityAdvancedEnchantmentTable extends TileEntity implements
 	}
 
 	@Override
-	public boolean func_94042_c() {
+	public boolean isInvNameLocalized() {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public boolean func_94041_b(int i, ItemStack itemstack) {
+	public boolean isStackValidForSlot(int i, ItemStack itemstack) {
+		// TODO Auto-generated method stub
 		return true;
 	}
 

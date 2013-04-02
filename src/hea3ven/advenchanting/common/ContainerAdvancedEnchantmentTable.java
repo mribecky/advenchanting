@@ -1,7 +1,5 @@
 package hea3ven.advenchanting.common;
 
-import java.util.Iterator;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -90,9 +88,8 @@ public class ContainerAdvancedEnchantmentTable extends Container {
 
 	public void detectAndSendChanges() {
 		super.detectAndSendChanges();
-		Iterator var1 = this.crafters.iterator();
-		while (var1.hasNext()) {
-			ICrafting var2 = (ICrafting) var1.next();
+		for (int i = 0; i < this.crafters.size(); i++) {
+			ICrafting var2 = (ICrafting) this.crafters.get(i);
 			if (this.lastProgress != this.tileEntity.getProgress()) {
 				var2.sendProgressBarUpdate(this, 0,
 						this.tileEntity.getProgress());

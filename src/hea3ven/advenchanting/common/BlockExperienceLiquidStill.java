@@ -1,16 +1,13 @@
 package hea3ven.advenchanting.common;
 
-import java.util.Random;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockStationary;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
 import net.minecraftforge.liquids.ILiquid;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockExperienceLiquidStill extends BlockStationary implements
 		ILiquid {
@@ -26,32 +23,30 @@ public class BlockExperienceLiquidStill extends BlockStationary implements
 		disableStats();
 	}
 
-	public void func_94332_a(IconRegister par1IconRegister) {
+	public void registerIcon(IconRegister par1IconRegister) {
 		this.icons = new Icon[] {
-				par1IconRegister.func_94245_a("AdvEnchanting:expliquid"),
-				par1IconRegister.func_94245_a("AdvEnchanting:expliquid_flow") };
+				par1IconRegister.registerIcon("AdvEnchanting:expliquid"),
+				par1IconRegister.registerIcon("AdvEnchanting:expliquid_flow") };
 	}
 
-    public Icon getBlockTextureFromSideAndMetadata(int par1, int par2)
-    {
-        return par1 != 0 && par1 != 1 ? icons[1] : icons[0];
-    }
+	public Icon getBlockTextureFromSideAndMetadata(int par1, int par2) {
+		return par1 != 0 && par1 != 1 ? icons[1] : icons[0];
+	}
 
-    @SideOnly(Side.CLIENT)
-    public static Icon func_94424_b(String par0Str)
-    {
-        return par0Str == "water" ? AdvancedEnchantingMod.experienceLiquidStill.icons[0] : AdvancedEnchantingMod.experienceLiquidStill.icons[1];
-    }
-    
-    // @Override
+	@SideOnly(Side.CLIENT)
+	public static Icon func_94424_b(String par0Str) {
+		return par0Str == "water" ? AdvancedEnchantingMod.experienceLiquidStill.icons[0]
+				: AdvancedEnchantingMod.experienceLiquidStill.icons[1];
+	}
+
+	// @Override
 	// @SideOnly(Side.CLIENT)
 	// public int colorMultiplier(IBlockAccess par1iBlockAccess, int par2,
 	// int par3, int par4) {
 	// return 0xFF0000;
 	// }
 
-
-    @Override
+	@Override
 	public int stillLiquidId() {
 		return AdvancedEnchantingMod.experienceLiquidStill.blockID;
 	}

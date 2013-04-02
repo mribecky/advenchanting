@@ -1,18 +1,12 @@
 package hea3ven.advenchanting.common;
 
-import java.util.Random;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockFlowing;
-import net.minecraft.block.BlockFluid;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.util.Icon;
-import net.minecraft.world.World;
 import net.minecraftforge.liquids.ILiquid;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockExperienceLiquidFlowing extends BlockFlowing implements ILiquid {
 
@@ -28,10 +22,10 @@ public class BlockExperienceLiquidFlowing extends BlockFlowing implements ILiqui
 		setLightOpacity(3);
 	}
 
-	public void func_94332_a(IconRegister par1IconRegister) {
+	public void registerIcons(IconRegister par1IconRegister) {
 		this.icons = new Icon[] {
-				par1IconRegister.func_94245_a("AdvEnchanting:expliquid"),
-				par1IconRegister.func_94245_a("AdvEnchanting:expliquid_flow") };
+				par1IconRegister.registerIcon("AdvEnchanting:expliquid"),
+				par1IconRegister.registerIcon("AdvEnchanting:expliquid_flow") };
 	}
 
     @SideOnly(Side.CLIENT)

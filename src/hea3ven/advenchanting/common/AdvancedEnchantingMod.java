@@ -10,7 +10,6 @@ import net.minecraftforge.liquids.LiquidContainerData;
 import net.minecraftforge.liquids.LiquidContainerRegistry;
 import net.minecraftforge.liquids.LiquidDictionary;
 import net.minecraftforge.liquids.LiquidStack;
-import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.Init;
 import cpw.mods.fml.common.Mod.Instance;
@@ -105,15 +104,6 @@ public class AdvancedEnchantingMod {
 		// TickRegistry.registerTickHandler(new TimeControlTickHandler(),
 		// Side.SERVER);
 		// FMLCommonHandler.instance().getMinecraftServerInstance().get
-
-		net.minecraft.client.renderer.RenderEngine renderEngine = FMLClientHandler
-				.instance().getClient().renderEngine;
-
-		// renderEngine.registerTextureFX(new TextureExperienceLiquidFX());
-		// AdvancedEnchantingMod.expLiquidModel = RenderingRegistry
-		// .getNextAvailableRenderId();
-		// RenderingRegistry.registerBlockHandler(new
-		// RenderingExperienceLiquid());
 
 	}
 

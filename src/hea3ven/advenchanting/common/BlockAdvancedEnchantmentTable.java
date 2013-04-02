@@ -26,16 +26,16 @@ public class BlockAdvancedEnchantmentTable extends BlockEnchantmentTable {
 	}
 	
     @SideOnly(Side.CLIENT)
-    public void func_94332_a(IconRegister par1IconRegister)
+    public void registerIcons(IconRegister par1IconRegister)
     {
-        this.field_94336_cN = par1IconRegister.func_94245_a("AdvEnchanting:advenchantment_side");
-        this.iconTop = par1IconRegister.func_94245_a("AdvEnchanting:advenchantment_top");
-        this.iconBottom = par1IconRegister.func_94245_a("AdvEnchanting:advenchantment_bottom");
+        this.blockIcon = par1IconRegister.registerIcon("AdvEnchanting:advenchantment_side");
+        this.iconTop = par1IconRegister.registerIcon("AdvEnchanting:advenchantment_top");
+        this.iconBottom = par1IconRegister.registerIcon("AdvEnchanting:advenchantment_bottom");
     }
 	
     public Icon getBlockTextureFromSideAndMetadata(int par1, int par2)
     {
-        return par1 == 0 ? this.iconBottom : (par1 == 1 ? this.iconTop : this.field_94336_cN);
+        return par1 == 0 ? this.iconBottom : (par1 == 1 ? this.iconTop : this.blockIcon);
     }
 
 	@Override
