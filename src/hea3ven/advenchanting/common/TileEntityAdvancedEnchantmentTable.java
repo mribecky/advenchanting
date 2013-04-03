@@ -313,4 +313,8 @@ public class TileEntityAdvancedEnchantmentTable extends TileEntity implements
 		return true;
 	}
 
+	public LiquidStack getExperienceLiquid() {
+		return experienceTank.getLiquid();
+	}
+
 }

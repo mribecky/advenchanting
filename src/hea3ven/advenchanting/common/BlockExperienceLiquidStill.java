@@ -23,7 +23,7 @@ public class BlockExperienceLiquidStill extends BlockStationary implements
 		disableStats();
 	}
 
-	public void registerIcon(IconRegister par1IconRegister) {
+	public void registerIcons(IconRegister par1IconRegister) {
 		this.icons = new Icon[] {
 				par1IconRegister.registerIcon("AdvEnchanting:expliquid"),
 				par1IconRegister.registerIcon("AdvEnchanting:expliquid_flow") };

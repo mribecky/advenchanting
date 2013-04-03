@@ -43,6 +43,8 @@ public class AdvancedEnchantingMod {
 			2002, Material.water);
 	public final static BlockExperienceLiquidFlowing experienceLiquidFlowing = new BlockExperienceLiquidFlowing(
 			2001, Material.water);
+	
+	public final static BlockExperienceCollector experienceCollector = new BlockExperienceCollector(2003, Material.rock);
 
 	public static LiquidStack experienceLiquid;
 
@@ -64,6 +66,7 @@ public class AdvancedEnchantingMod {
 
 		ItemStack advancedEnchantmentTableStack = new ItemStack(
 				advancedEnchantmentTableBlock);
+		ItemStack experienceCollectorStack = new ItemStack(experienceCollector);
 
 		GameRegistry.registerBlock(advancedEnchantmentTableBlock,
 				"advEnchantmentTable");
@@ -72,6 +75,10 @@ public class AdvancedEnchantingMod {
 		GameRegistry.registerTileEntity(
 				TileEntityAdvancedEnchantmentTable.class,
 				"containerAdvancedEnchantmentTable");
+		
+		GameRegistry.registerBlock(experienceCollector);
+		LanguageRegistry.addName(experienceCollector, "Experience Collector");
+		GameRegistry.registerTileEntity(TileEntityExperienceCollector.class, "containerExperienceCollector");
 
 		LanguageRegistry.addName(bucketExpLiquid, "Experience Bucket");
 

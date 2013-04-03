@@ -7,6 +7,7 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.StatCollector;
+import net.minecraftforge.liquids.LiquidStack;
 
 import org.lwjgl.opengl.GL11;
 
@@ -63,7 +64,7 @@ public class GuiAdvancedEnchantmentTable extends GuiContainer {
 			int par3) {
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		this.mc.renderEngine
-				.bindTexture("/hea3ven/advenchanting/advenchant.png");
+				.bindTexture("/mods/AdvEnchanting/textures/gui/advenchant.png");
 		int x = (width - xSize) / 2;
 		int y = (height - ySize) / 2;
 		this.drawTexturedModalRect(x, y, 0, 0, xSize, ySize);
@@ -72,9 +73,11 @@ public class GuiAdvancedEnchantmentTable extends GuiContainer {
 		// progress = 10;
 		this.drawTexturedModalRect(x + 55, y + 25, 200, 14, progress, 16);
 
-		// displayGauge(x, y, 19, 167,
-		// tileEntityAdvEnchTable.getExperienceScaled(58),
-		// AdvancedEnchantingMod.experienceLiquidStill.blockID, 0);
+		if (tileEntityAdvEnchTable.getExperienceLiquid() != null) {
+			displayGauge(x, y, 19, 167,
+					tileEntityAdvEnchTable.getExperienceScaled(58),
+					tileEntityAdvEnchTable.getExperienceLiquid());
+		}
 	}
 
 	@Override
@@ -96,51 +99,36 @@ public class GuiAdvancedEnchantmentTable extends GuiContainer {
 
 	}
 
-	// private void displayGauge(int j, int k, int line, int col, int squaled,
-	// int liquidId, int liquidMeta) {
-	// int liquidImgIndex = 0;
-	//
-	// if (liquidId <= 0)
-	// return;
-	// if (liquidId < Block.blocksList.length
-	// && Block.blocksList[liquidId] != null) {
-	// ForgeHooksClient.bindTexture(
-	// Block.blocksList[liquidId].getTextureFile(), 0);
-	// liquidImgIndex = Block.blocksList[liquidId].blockIndexInTexture;
-	// } else if (Item.itemsList[liquidId] != null) {
-	// ForgeHooksClient.bindTexture(
-	// Item.itemsList[liquidId].getTextureFile(), 0);
-	// liquidImgIndex = Item.itemsList[liquidId]
-	// .getIconFromDamage(liquidMeta);
-	// } else
-	// return;
-	//
-	// int imgLine = liquidImgIndex / 16;
-	// int imgColumn = liquidImgIndex - imgLine * 16;
-	//
-	// int start = 0;
-	//
-	// while (true) {
-	// int x = 0;
-	//
-	// if (squaled > 16) {
-	// x = 16;
-	// squaled -= 16;
-	// } else {
-	// x = squaled;
-	// squaled = 0;
-	// }
-	//
-	// drawTexturedModalRect(j + col, k + line + 58 - x - start,
-	// imgColumn * 16, imgLine * 16 + (16 - x), 16, 16 - (16 - x));
-	// start = start + 16;
-	//
-	// if (x == 0 || squaled == 0) {
-	// break;
-	// }
-	// }
-	//
-	// this.mc.renderEngine.func_98187_b("/hea3ven/advenchanting/advenchant.png");
-	// drawTexturedModalRect(j + col, k + line, 200, 34, 16, 60);
-	// }
+	private void displayGauge(int j, int k, int line, int col, int squaled,
+			LiquidStack liquid) {
+		if (liquid == null) {
+			return;
+		}
+		int start = 0;
+
+		while (true) {
+			int x = 0;
+
+			if (squaled > 16) {
+				x = 16;
+				squaled -= 16;
+			} else {
+				x = squaled;
+				squaled = 0;
+			}
+
+//			drawTexturedModelRectFromIcon(j + col, k + line + 58 - x - start,
+//					liquid.getRenderingIcon(), 16, 16 - (16 - x));
+			start = start + 16;
+
+			if (x == 0 || squaled == 0) {
+				break;
+			}
+		}
+
+		mc.renderEngine
+				.bindTexture("/mods/AdvEnchanting/textures/gui/advenchant.png");
+		drawTexturedModalRect(j + col, k + line, 176, 0, 16, 60);
+	}
+
 }
